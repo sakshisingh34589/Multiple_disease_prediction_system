@@ -1,13 +1,23 @@
 # Multiple Disease Prediction System
 
-This project predicts multiple diseases using Machine Learning.
+## Project Overview
 
-Current Progress
+This project predicts multiple diseases using Machine Learning models.
 
-✔ EDA
+The goal is to build an industry-standard, modular, and deployment-ready application.
 
-✔ Data Preprocessing
+## Project Structure
 
-⬜ Model Training
+- notebooks/ → EDA and experimentation
+- src/ → Production Python scripts
+- data/ → Raw and processed datasets
+- models/ → Saved preprocessing pipeline and trained models
+- app/ → Deployment code
 
-⬜ Deployment
+## Current Progress
+
+- ✅ Diabetes EDA
+- ✅ Diabetes Preprocessing
+- ⏳ Model Training
+- ⏳ Model Evaluation
+- ⏳ Streamlit Deployment
