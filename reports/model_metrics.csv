@@ -1,0 +1,8 @@
+Metric,Value
+Accuracy,0.6494
+Precision,0.0
+Recall (Sensitivity),0.0
+F1 Score,0.0
+ROC AUC,0.6441
+Balanced Accuracy,0.5
+Matthews Correlation Coefficient (MCC),0.0
