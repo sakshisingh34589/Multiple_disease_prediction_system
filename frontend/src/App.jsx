@@ -1,6 +1,7 @@
 import { useState } from "react";
 import PredictionForm from "./components/PredictionForm";
 import PredictionResult from "./components/PredictionResult";
+import CardiovascularForm from "./components/CardiovascularForm";
 import "./App.css";
 
 const diseases = [
@@ -13,10 +14,10 @@ const diseases = [
   },
   {
     id: "heart",
-    name: "Heart Disease",
+    name: "Cardiovascular Disease",
     icon: "❤️",
-    description: "Heart disease risk prediction.",
-    status: "coming",
+    description: "Cardiovascular disease risk prediction.",
+    status: "active",
   },
   {
     id: "kidney",
@@ -238,11 +239,20 @@ function App() {
               Patient Information
             </div>
 
-            <PredictionForm
-              onResult={setResult}
-              onLoading={setLoading}
-              onError={setError}
-            />
+            
+{selectedDisease === "diabetes" ? (
+  <PredictionForm
+    onResult={setResult}
+    onLoading={setLoading}
+    onError={setError}
+  />
+) : selectedDisease === "heart" ? (
+  <CardiovascularForm
+    onResult={setResult}
+    onLoading={setLoading}
+  />
+) : null}
+
 
             {loading && (
               <div className="loading-box">

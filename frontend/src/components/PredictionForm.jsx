@@ -47,10 +47,20 @@ function PredictionForm({ onResult, onLoading, onError }) {
       const result = await predictDiabetes(payload);
 
       onResult(result);
-    } catch (error) {
-      onError(error.message);
-      onResult(null);
-    } finally {
+    }  catch (error) {
+  const rawMessage = error?.response?.data?.detail
+    ?? error?.response?.data?.message
+    ?? error?.message
+    ?? "Prediction failed. Please try again.";
+
+  const message =
+    typeof rawMessage === "string"
+      ? rawMessage
+      : JSON.stringify(rawMessage);
+
+  onError(message);
+  onResult(null);
+} finally {
       onLoading(false);
     }
   };

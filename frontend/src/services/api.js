@@ -22,3 +22,26 @@ export async function predictDiabetes(patientData) {
 
   return data;
 }
+
+export const predictCardiovascular = async (data) => {
+  const response = await fetch(
+    `${API_BASE_URL}/api/v1/predict/heart-disease`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    }
+  );
+
+  const result = await response.json().catch(() => ({}));
+
+  if (!response.ok) {
+    throw new Error(
+      result.detail || "Cardiovascular prediction failed."
+    );
+  }
+
+  return result;
+};

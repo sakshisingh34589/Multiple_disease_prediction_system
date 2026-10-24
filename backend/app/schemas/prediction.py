@@ -28,3 +28,23 @@ class DiabetesPredictionResponse(BaseModel):
     prediction: int
     probability: float
     message: str
+
+class HeartDiseasePredictionRequest(BaseModel):
+    age: float = Field(..., gt=25, lt=120)
+    gender: int = Field(..., ge=1, le=2)
+    height: float = Field(..., gt=50, lt=250)
+    weight: float = Field(..., gt=10, lt=300)
+    ap_hi: int = Field(..., gt=50, lt=250)
+    ap_lo: int = Field(..., gt=30, lt=150)
+    cholesterol: int = Field(..., ge=1, le=3)
+    gluc: int = Field(..., ge=1, le=3)
+    smoke: int = Field(..., ge=0, le=1)
+    alco: int = Field(..., ge=0, le=1)
+    active: int = Field(..., ge=0, le=1)
+
+
+class HeartDiseasePredictionResponse(BaseModel):
+    disease: str
+    prediction: int
+    probability: float
+    message: str

@@ -6,7 +6,12 @@ from ..schemas.prediction import (
 )
 
 from ..services.prediction_service import PredictionService
-
+from ..schemas.prediction import (
+    DiabetesPredictionRequest,
+    DiabetesPredictionResponse,
+    HeartDiseasePredictionRequest,
+    HeartDiseasePredictionResponse,
+)
 
 # ---------------------------------------------------------
 # Create router
@@ -76,4 +81,39 @@ def predict_diabetes(
         raise HTTPException(
             status_code=500,
             detail=f"Prediction failed: {str(error)}",
+        )
+@router.post(
+    "/predict/heart-disease",
+    response_model=HeartDiseasePredictionResponse,
+)
+def predict_heart_disease(
+    request: HeartDiseasePredictionRequest,
+):
+    try:
+        features = request.model_dump()
+
+        prediction, probability = model_service.predict(
+            disease="heart-disease",
+            features=features,
+        )
+
+        message = (
+            "Heart disease risk detected."
+            if prediction == 1
+            else "Heart disease risk not detected."
+        )
+
+        return HeartDiseasePredictionResponse(
+            disease="heart-disease",
+            prediction=prediction,
+            probability=round(probability, 4),
+            message=message,
+        )
+
+    except RuntimeError as error:
+        raise HTTPException(status_code=503, detail=str(error))
+    except Exception:
+        raise HTTPException(
+            status_code=500,
+            detail="Heart disease prediction failed.",
         )

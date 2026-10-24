@@ -1,0 +1,66 @@
+{
+  "model_name": "Random Forest",
+  "disease_name": "Cardiovascular Disease",
+  "dataset_target": "cardio",
+  "target_mapping": {
+    "0": "No cardiovascular disease label",
+    "1": "Cardiovascular disease label"
+  },
+  "feature_names": [
+    "age",
+    "height",
+    "weight",
+    "ap_hi",
+    "ap_lo",
+    "gender",
+    "cholesterol",
+    "gluc",
+    "smoke",
+    "alco",
+    "active"
+  ],
+  "numerical_features": [
+    "age",
+    "height",
+    "weight",
+    "ap_hi",
+    "ap_lo"
+  ],
+  "categorical_features": [
+    "gender",
+    "cholesterol",
+    "gluc",
+    "smoke",
+    "alco",
+    "active"
+  ],
+  "age_unit": "years",
+  "selection_metric": "5-fold cross-validation ROC-AUC",
+  "cv_roc_auc": {
+    "Logistic Regression": 0.7911846019849682,
+    "Random Forest": 0.8000445446566117
+  },
+  "test_metrics": {
+    "accuracy": 0.7325606822654712,
+    "roc_auc": 0.8000442534400036,
+    "precision": 0.7598398932621748,
+    "recall": 0.6714812085482682,
+    "f1": 0.7129332603082701
+  },
+  "threshold": 0.5,
+  "sklearn_version": "1.9.0",
+  "pandas_version": "2.2.3",
+  "input_example": {
+    "age": 50.0,
+    "gender": 1,
+    "height": 168,
+    "weight": 75.0,
+    "ap_hi": 120,
+    "ap_lo": 80,
+    "cholesterol": 1,
+    "gluc": 1,
+    "smoke": 0,
+    "alco": 0,
+    "active": 1
+  }
+}
