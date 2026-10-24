@@ -13,6 +13,11 @@ venv/
 *.pkl
 *.sav
 
+# Track only the project's trusted model artifacts
+!models/diabetes/diabetes_model.pkl
+!models/diabetes/preprocessor.pkl
+!models/heart_disease/heart_disease_pipeline.pkl
+
 # VS Code
 .vscode/
 
