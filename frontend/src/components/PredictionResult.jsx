@@ -29,9 +29,13 @@ function PredictionResult({ result }) {
             : "Low Risk Detected"}
         </h2>
 
-        <p className="result-message">
-          {result.message}
-        </p>
+       <p className="result-message">
+  {typeof result.message === "string"
+    ? result.message
+    : result.message
+      ? JSON.stringify(result.message)
+      : "Prediction completed."}
+</p>
 
         <div className="probability-section">
 
