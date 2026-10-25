@@ -2,6 +2,7 @@ import { useState } from "react";
 import PredictionForm from "./components/PredictionForm";
 import PredictionResult from "./components/PredictionResult";
 import CardiovascularForm from "./components/CardiovascularForm";
+import ParkinsonsForm from "./components/ParkinsonsForm";
 import "./App.css";
 
 const diseases = [
@@ -38,7 +39,7 @@ const diseases = [
     name: "Parkinson's",
     icon: "🧠",
     description: "Parkinson's disease prediction.",
-    status: "coming",
+    status: "active",
   },
   {
     id: "lung",
@@ -250,6 +251,12 @@ function App() {
   <CardiovascularForm
     onResult={setResult}
     onLoading={setLoading}
+  />
+) : selectedDisease === "parkinson" ? (
+  <ParkinsonsForm
+    onResult={setResult}
+    onLoading={setLoading}
+    onError={setError}
   />
 ) : null}
 

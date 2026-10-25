@@ -5,122 +5,114 @@ import pandas as pd
 
 
 class PredictionService:
-    """
-    Reusable service responsible for loading ML artifacts
-    and generating predictions.
-    """
-
     def __init__(self):
-        # ---------------------------------------------------------
-        # Find project root
-        # ---------------------------------------------------------
-
-        # prediction_service.py
-        # -> services
-        # -> app
-        # -> backend
-        # -> project root
         self.project_root = Path(__file__).resolve().parents[3]
 
-        # ---------------------------------------------------------
-        # Model and preprocessor paths
-        # ---------------------------------------------------------
-
-        self.model_path = (
-            self.project_root
-            / "models"
-            / "diabetes"
-            / "diabetes_model.pkl"
+        # Diabetes model
+        diabetes_model_path = (
+            self.project_root / "models" / "diabetes" / "diabetes_model.pkl"
+        )
+        diabetes_preprocessor_path = (
+            self.project_root / "models" / "diabetes" / "preprocessor.pkl"
         )
 
-        self.preprocessor_path = (
-            self.project_root
-            / "models"
-            / "diabetes"
-            / "preprocessor.pkl"
-        )
+        self.model = self._load_artifact(diabetes_model_path)
+        self.preprocessor = self._load_artifact(diabetes_preprocessor_path)
 
-        # ---------------------------------------------------------
-        # Load model and preprocessor
-        # ---------------------------------------------------------
-
-        self.model = self._load_artifact(self.model_path)
-        self.preprocessor = self._load_artifact(
-            self.preprocessor_path
-        )
-
-        # Heart
+        # Heart disease model
         heart_path = (
             self.project_root
             / "models"
             / "heart_disease"
             / "heart_disease_pipeline.pkl"
         )
+        self.heart_pipeline = (
+            self._load_artifact(heart_path) if heart_path.exists() else None
+        )
 
-        self.heart_pipeline = None
+        # Parkinson's disease model
+        parkinsons_model_path = (
+            self.project_root
+            / "models"
+            / "parkinsons"
+            / "parkinsons_model.pkl"
+        )
+        parkinsons_preprocessor_path = (
+            self.project_root
+            / "models"
+            / "parkinsons"
+            / "preprocessor.pkl"
+        )
 
-        if heart_path.exists():
-            self.heart_pipeline = self._load_artifact(heart_path)
+        self.parkinsons_model = (
+            self._load_artifact(parkinsons_model_path)
+            if parkinsons_model_path.exists()
+            else None
+        )
+        self.parkinsons_preprocessor = (
+            self._load_artifact(parkinsons_preprocessor_path)
+            if parkinsons_preprocessor_path.exists()
+            else None
+        )
 
     def _load_artifact(self, path: Path):
-        """
-        Load a serialized ML artifact using joblib.
-        """
-
         if not path.exists():
-            raise FileNotFoundError(
-                f"Model artifact not found: {path}"
-            )
-
+            raise FileNotFoundError(f"Model artifact not found: {path}")
         return joblib.load(path)
 
-    def predict(
-        self,
-        disease: str,
-        features: dict,
-    ):
-        """
-        Generate prediction for a disease.
+    def _get_probability(self, model, transformed_data, prediction):
+        if hasattr(model, "predict_proba"):
+            probabilities = model.predict_proba(transformed_data)[0]
+            classes = list(model.classes_)
 
-        Currently supports:
-        - diabetes
+            if 1 in classes:
+                return float(probabilities[classes.index(1)])
 
-        This structure is intentionally reusable so that
-        additional diseases can be added later.
-        """
+        return float(prediction)
 
-        # ---------------------------------------------------------
-        # Validate disease
-        # ---------------------------------------------------------
+    def predict(self, disease: str, features: dict):
+        disease = disease.lower()
 
-        if disease.lower() == "heart-disease":
+        # Heart disease prediction
+        if disease == "heart-disease":
             if self.heart_pipeline is None:
                 raise RuntimeError("Heart disease model is unavailable.")
 
             input_df = pd.DataFrame([features])
             prediction = int(self.heart_pipeline.predict(input_df)[0])
-
-            probability = (
-                float(self.heart_pipeline.predict_proba(input_df)[0][1])
-                if hasattr(self.heart_pipeline, "predict_proba")
-                else float(prediction)
-           )
-
+            probability = self._get_probability(
+                self.heart_pipeline, input_df, prediction
+            )
             return prediction, probability
 
-        if disease.lower() != "diabetes":
+        # Parkinson's disease prediction
+        if disease in ("parkinsons", "parkinson's", "parkinsons-disease"):
+            if (
+                self.parkinsons_model is None
+                or self.parkinsons_preprocessor is None
+            ):
+                raise RuntimeError("Parkinson's disease model is unavailable.")
+
+            input_df = pd.DataFrame([features])
+            transformed_data = self.parkinsons_preprocessor.transform(input_df)
+
+            prediction = int(
+                self.parkinsons_model.predict(transformed_data)[0]
+            )
+            probability = self._get_probability(
+                self.parkinsons_model, transformed_data, prediction
+            )
+            return prediction, probability
+
+        # Diabetes prediction
+        if disease != "diabetes":
             raise ValueError(f"Unsupported disease: {disease}")
 
         input_df = pd.DataFrame([features])
         transformed_data = self.preprocessor.transform(input_df)
-
         prediction = int(self.model.predict(transformed_data)[0])
-
-        probability = (
-            float(self.model.predict_proba(transformed_data)[0][1])
-            if hasattr(self.model, "predict_proba")
-            else float(prediction)
-    )
+        probability = self._get_probability(
+            self.model, transformed_data, prediction
+        )
 
         return prediction, probability
-            
