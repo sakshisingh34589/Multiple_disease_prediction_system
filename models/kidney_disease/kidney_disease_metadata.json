@@ -1,0 +1,43 @@
+{
+  "disease": "kidney_disease",
+  "model_file": "kidney_disease_pipeline.pkl",
+  "pipeline_type": "scikit-learn Pipeline",
+  "selected_model": "Gradient Boosting",
+  "dataset_file": "CKD_NHANES_2021_2023.csv",
+  "target_column": "ckd_present",
+  "features": [
+    "age",
+    "gender",
+    "ethnicity",
+    "education_level",
+    "poverty_income_ratio",
+    "bmi",
+    "weight_kg",
+    "height_cm",
+    "bp_systolic",
+    "bp_diastolic",
+    "serum_creatinine",
+    "blood_urea_nitrogen",
+    "albumin_serum",
+    "phosphorus",
+    "bicarbonate",
+    "calcium",
+    "uric_acid",
+    "urine_creatinine",
+    "urine_albumin",
+    "albumin_creatinine_ratio",
+    "diabetes_diagnosed",
+    "ever_smoked"
+  ],
+  "target_mapping": {
+    "0": "No chronic kidney disease (ckd_present=0)",
+    "1": "Chronic kidney disease present (ckd_present=1)"
+  },
+  "test_metrics": {
+    "accuracy": 0.9819857561793046,
+    "precision": 0.9909365558912386,
+    "recall": 0.9832134292565947,
+    "f1_score": 0.9870598856455011,
+    "roc_auc": 0.9988084636602262
+  }
+}

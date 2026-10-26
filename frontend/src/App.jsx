@@ -4,6 +4,7 @@ import Diabetes from "./pages/Diabetes";
 import HeartDisease from "./pages/HeartDisease";
 import Parkinsons from "./pages/Parkinsons";
 import LiverDisease from "./pages/LiverDisease";
+import KidneyDisease from "./pages/KidneyDisease";
 import "./App.css";
 
 const diseases = [
@@ -26,7 +27,7 @@ const diseases = [
     name: "Kidney Disease",
     icon: "🫘",
     description: "Kidney disease risk assessment.",
-    status: "coming",
+    status: "active",
   },
   {
     id: "liver",
@@ -66,7 +67,7 @@ function App() {
 
     setSelectedDisease(disease.id);
     setResult(null);
-    setError("");
+    
   };
 
   return (
@@ -265,7 +266,16 @@ function App() {
     onLoading={setLoading}
     onError={setError}
   />
+
+) : selectedDisease === "kidney" ? (
+  <KidneyDisease
+    onResult={setResult}
+    onLoading={setLoading}
+    onError={setError}
+    loading={loading}
+  />
 ) : null}
+
 
 
             {loading && (
@@ -282,11 +292,6 @@ function App() {
               </div>
             )}
 
-            {error && (
-              <div className="error">
-                ⚠️ {error}
-              </div>
-            )}
 
           </div>
 
@@ -296,6 +301,11 @@ function App() {
               <span>02</span>
               Prediction Result
             </div>
+            {error && (
+  <div className="error" role="alert">
+    ⚠️ {error}
+  </div>
+)}
 
             {!result && !loading && (
               <div className="empty-result">
