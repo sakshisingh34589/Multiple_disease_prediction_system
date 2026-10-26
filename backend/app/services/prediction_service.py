@@ -66,6 +66,21 @@ class PredictionService:
             if liver_path.exists()
             else None
         )
+        
+        # Kidney disease model
+        kidney_path = (
+            self.project_root
+            / "models"
+            / "kidney_disease"
+            / "kidney_disease_pipeline.pkl"
+        )
+
+        self.kidney_pipeline = (
+            self._load_artifact(kidney_path)
+            if kidney_path.exists()
+            else None
+        )
+
 
     def _load_artifact(self, path: Path):
         if not path.exists():
@@ -84,6 +99,23 @@ class PredictionService:
 
     def predict(self, disease: str, features: dict):
         disease = disease.lower()
+        
+        # Kidney disease prediction
+        if disease in ("kidney-disease", "kidney_disease", "kidney"):
+            if self.kidney_pipeline is None:
+                raise RuntimeError("Kidney disease model is unavailable.")
+
+            input_df = pd.DataFrame([features])
+
+            prediction = int(self.kidney_pipeline.predict(input_df)[0])
+            probability = self._get_probability(
+                self.kidney_pipeline,
+                input_df,
+                prediction,
+            )
+
+            return prediction, probability
+
         if disease in ("liver-disease", "liver_disease", "liver"):
             if self.liver_pipeline is None:
                 raise RuntimeError("Liver disease model is unavailable.")

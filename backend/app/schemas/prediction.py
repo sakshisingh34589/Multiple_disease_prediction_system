@@ -88,3 +88,40 @@ class LiverDiseasePredictionResponse(BaseModel):
     prediction: int
     probability: float
     message: str
+
+class KidneyDiseasePredictionRequest(BaseModel):
+    age: float = Field(..., ge=0, le=120)
+    gender: str = Field(..., pattern="^(Male|Female)$")
+    ethnicity: str = Field(
+        ...,
+        pattern=(
+            "^(Non-Hispanic Asian|Non-Hispanic White|Other Hispanic|"
+            "Other/Multiracial|Mexican American|Non-Hispanic Black)$"
+        ),
+    )
+    education_level: float = Field(..., ge=1, le=9)
+    poverty_income_ratio: float = Field(..., ge=0)
+    bmi: float = Field(..., ge=0)
+    weight_kg: float = Field(..., ge=0)
+    height_cm: float = Field(..., ge=0)
+    bp_systolic: float = Field(..., ge=0)
+    bp_diastolic: float = Field(..., ge=0)
+    serum_creatinine: float = Field(..., ge=0)
+    blood_urea_nitrogen: float = Field(..., ge=0)
+    albumin_serum: float = Field(..., ge=0)
+    phosphorus: float = Field(..., ge=0)
+    bicarbonate: float = Field(..., ge=0)
+    calcium: float = Field(..., ge=0)
+    uric_acid: float = Field(..., ge=0)
+    urine_creatinine: float = Field(..., ge=0)
+    urine_albumin: float = Field(..., ge=0)
+    albumin_creatinine_ratio: float = Field(..., ge=0)
+    diabetes_diagnosed: float = Field(..., ge=1, le=9)
+    ever_smoked: float = Field(..., ge=1, le=9)
+
+
+class KidneyDiseasePredictionResponse(BaseModel):
+    disease: str
+    prediction: int
+    probability: float
+    message: str
