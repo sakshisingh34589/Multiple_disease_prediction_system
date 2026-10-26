@@ -54,6 +54,18 @@ class PredictionService:
             if parkinsons_preprocessor_path.exists()
             else None
         )
+        liver_path = (
+            self.project_root
+            / "models"
+            / "liver_disease"
+            / "liver_disease_pipeline.pkl"
+        )
+
+        self.liver_pipeline = (
+            self._load_artifact(liver_path)
+            if liver_path.exists()
+            else None
+        )
 
     def _load_artifact(self, path: Path):
         if not path.exists():
@@ -72,7 +84,20 @@ class PredictionService:
 
     def predict(self, disease: str, features: dict):
         disease = disease.lower()
+        if disease in ("liver-disease", "liver_disease", "liver"):
+            if self.liver_pipeline is None:
+                raise RuntimeError("Liver disease model is unavailable.")
 
+            input_df = pd.DataFrame([features])
+
+            prediction = int(self.liver_pipeline.predict(input_df)[0])
+            probability = self._get_probability(
+                self.liver_pipeline,
+                input_df,
+                prediction
+            )
+
+            return prediction, probability
         # Heart disease prediction
         if disease == "heart-disease":
             if self.heart_pipeline is None:

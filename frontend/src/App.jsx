@@ -1,8 +1,9 @@
 import { useState } from "react";
-import PredictionForm from "./components/PredictionForm";
 import PredictionResult from "./components/PredictionResult";
-import CardiovascularForm from "./components/CardiovascularForm";
-import ParkinsonsForm from "./components/ParkinsonsForm";
+import Diabetes from "./pages/Diabetes";
+import HeartDisease from "./pages/HeartDisease";
+import Parkinsons from "./pages/Parkinsons";
+import LiverDisease from "./pages/LiverDisease";
 import "./App.css";
 
 const diseases = [
@@ -32,7 +33,7 @@ const diseases = [
     name: "Liver Disease",
     icon: "🫀",
     description: "Liver disease prediction.",
-    status: "coming",
+    status: "active",
   },
   {
     id: "parkinson",
@@ -242,18 +243,24 @@ function App() {
 
             
 {selectedDisease === "diabetes" ? (
-  <PredictionForm
+  <Diabetes
     onResult={setResult}
     onLoading={setLoading}
     onError={setError}
   />
 ) : selectedDisease === "heart" ? (
-  <CardiovascularForm
+  <HeartDisease
     onResult={setResult}
     onLoading={setLoading}
   />
 ) : selectedDisease === "parkinson" ? (
-  <ParkinsonsForm
+  <Parkinsons
+    onResult={setResult}
+    onLoading={setLoading}
+    onError={setError}
+  />
+) : selectedDisease === "liver" ? (
+  <LiverDisease
     onResult={setResult}
     onLoading={setLoading}
     onError={setError}

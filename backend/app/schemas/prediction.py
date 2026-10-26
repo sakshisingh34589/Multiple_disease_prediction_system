@@ -69,3 +69,22 @@ class ParkinsonsPredictionRequest(BaseModel):
     PPE: float
 
 
+
+class LiverDiseasePredictionRequest(BaseModel):
+    Age: int = Field(..., ge=1, le=120)
+    Gender: str = Field(..., pattern="^(Male|Female|male|female)$")
+    Total_Bilirubin: float = Field(..., ge=0)
+    Direct_Bilirubin: float = Field(..., ge=0)
+    Alkaline_Phosphotase: float = Field(..., ge=0)
+    Alamine_Aminotransferase: float = Field(..., ge=0)
+    Aspartate_Aminotransferase: float = Field(..., ge=0)
+    Total_Protiens: float = Field(..., ge=0)
+    Albumin: float = Field(..., ge=0)
+    Albumin_and_Globulin_Ratio: float = Field(..., ge=0)
+
+
+class LiverDiseasePredictionResponse(BaseModel):
+    disease: str
+    prediction: int
+    probability: float
+    message: str
