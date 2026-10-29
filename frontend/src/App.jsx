@@ -5,6 +5,7 @@ import HeartDisease from "./pages/HeartDisease";
 import Parkinsons from "./pages/Parkinsons";
 import LiverDisease from "./pages/LiverDisease";
 import KidneyDisease from "./pages/KidneyDisease";
+import LungDisease from "./pages/LungDisease";
 import "./App.css";
 
 const diseases = [
@@ -48,7 +49,7 @@ const diseases = [
     name: "Lung Disease",
     icon: "🫁",
     description: "Lung disease risk assessment.",
-    status: "coming",
+    status: "active",
   },
 ];
 
@@ -273,6 +274,12 @@ function App() {
     onLoading={setLoading}
     onError={setError}
     loading={loading}
+  />
+) : selectedDisease === "lung" ? (
+  <LungDisease
+    onResult={setResult}
+    onLoading={setLoading}
+    onError={setError}
   />
 ) : null}
 

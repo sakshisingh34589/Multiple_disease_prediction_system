@@ -125,3 +125,37 @@ class KidneyDiseasePredictionResponse(BaseModel):
     prediction: int
     probability: float
     message: str
+
+
+class LungDiseasePredictionRequest(BaseModel):
+    GENDER: int = Field(..., ge=0, le=1)
+    AGE: int = Field(..., ge=1, le=120)
+    SMOKING: int = Field(..., ge=0, le=1)
+    YELLOW_FINGERS: int = Field(..., ge=0, le=1)
+    ANXIETY: int = Field(..., ge=0, le=1)
+    PEER_PRESSURE: int = Field(..., ge=0, le=1)
+    CHRONIC_DISEASE: int = Field(..., alias="CHRONIC DISEASE", ge=0, le=1)
+    FATIGUE: int = Field(..., alias="FATIGUE ", ge=0, le=1)
+    ALLERGY: int = Field(..., alias="ALLERGY ", ge=0, le=1)
+    WHEEZING: int = Field(..., ge=0, le=1)
+    ALCOHOL_CONSUMING: int = Field(
+        ..., alias="ALCOHOL CONSUMING", ge=0, le=1
+    )
+    COUGHING: int = Field(..., ge=0, le=1)
+    SHORTNESS_OF_BREATH: int = Field(
+        ..., alias="SHORTNESS OF BREATH", ge=0, le=1
+    )
+    SWALLOWING_DIFFICULTY: int = Field(
+        ..., alias="SWALLOWING DIFFICULTY", ge=0, le=1
+    )
+    CHEST_PAIN: int = Field(..., alias="CHEST PAIN", ge=0, le=1)
+
+    model_config = ConfigDict(populate_by_name=True)
+
+
+class LungDiseasePredictionResponse(BaseModel):
+    disease: str
+    prediction: int
+    probability: float
+    message: str
+

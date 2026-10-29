@@ -10,6 +10,8 @@ from ..schemas.prediction import (
     LiverDiseasePredictionResponse,
     KidneyDiseasePredictionRequest,
     KidneyDiseasePredictionResponse,
+    LungDiseasePredictionRequest,
+    LungDiseasePredictionResponse,
 )
 from ..services.prediction_service import PredictionService
 
@@ -165,4 +167,41 @@ def predict_kidney_disease(request: KidneyDiseasePredictionRequest):
         raise HTTPException(
             status_code=500,
             detail=f"Kidney disease prediction failed: {str(error)}",
+        )
+
+
+@router.post(
+    "/predict/lung-disease",
+    response_model=LungDiseasePredictionResponse,
+)
+def predict_lung_disease(request: LungDiseasePredictionRequest):
+    try:
+        features = request.model_dump(by_alias=True)
+
+        prediction, probability = model_service.predict(
+            disease="lung-disease",
+            features=features,
+        )
+
+        message = (
+            "Lung cancer risk indicators detected. Please consult a qualified healthcare professional."
+            if prediction == 1
+            else "Lung cancer risk indicators not detected. This result does not rule out lung cancer."
+        )
+
+        return LungDiseasePredictionResponse(
+            disease="lung-disease",
+            prediction=prediction,
+            probability=round(probability, 4),
+            message=message,
+        )
+
+    except RuntimeError as error:
+        raise HTTPException(status_code=503, detail=str(error))
+    except ValueError as error:
+        raise HTTPException(status_code=422, detail=str(error))
+    except Exception:
+        raise HTTPException(
+            status_code=500,
+            detail="Lung cancer prediction failed.",
         )

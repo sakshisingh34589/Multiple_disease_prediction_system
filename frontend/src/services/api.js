@@ -110,3 +110,28 @@ export async function predictKidneyDisease(patientData) {
 
   return result;
 }
+
+
+
+export async function predictLungDisease(patientData) {
+  const response = await fetch(
+    `${API_BASE_URL}/api/v1/predict/lung-disease`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(patientData),
+    }
+  );
+
+  const result = await response.json().catch(() => ({}));
+
+  if (!response.ok) {
+    throw new Error(
+      result.detail || "Lung cancer prediction failed."
+    );
+  }
+
+  return result;
+}
