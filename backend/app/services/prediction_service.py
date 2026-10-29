@@ -81,6 +81,22 @@ class PredictionService:
             else None
         )
 
+        
+        # Lung cancer model
+        lung_path = (
+            self.project_root
+            / "models"
+            / "lung_disease"
+            / "best_lung_cancer_pipeline.pkl"
+        )
+
+        self.lung_pipeline = (
+            self._load_artifact(lung_path)
+            if lung_path.exists()
+            else None
+        )
+
+
 
     def _load_artifact(self, path: Path):
         if not path.exists():
@@ -99,6 +115,39 @@ class PredictionService:
 
     def predict(self, disease: str, features: dict):
         disease = disease.lower()
+
+        
+        # Lung cancer prediction
+        if disease in ("lung", "lung-disease", "lung_disease", "lung-cancer"):
+            if self.lung_pipeline is None:
+                raise RuntimeError("Lung cancer model is unavailable.")
+
+            # Preserve the exact feature names expected by the trained pipeline,
+            # including trailing spaces in "FATIGUE " and "ALLERGY ".
+            expected_features = list(self.lung_pipeline.feature_names_in_)
+
+            missing_features = [
+                name for name in expected_features if name not in features
+            ]
+            if missing_features:
+                raise ValueError(
+                    f"Missing lung prediction features: {missing_features}"
+                )
+
+            input_df = pd.DataFrame(
+                [[features[name] for name in expected_features]],
+                columns=expected_features,
+            )
+
+            prediction = int(self.lung_pipeline.predict(input_df)[0])
+            probability = self._get_probability(
+                self.lung_pipeline,
+                input_df,
+                prediction,
+            )
+
+            return prediction, probability
+
         
         # Kidney disease prediction
         if disease in ("kidney-disease", "kidney_disease", "kidney"):

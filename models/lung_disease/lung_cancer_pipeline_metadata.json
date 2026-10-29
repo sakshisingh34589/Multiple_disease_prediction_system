@@ -1,0 +1,68 @@
+{
+  "disease_name": "Lung Cancer",
+  "target_column": "LUNG_CANCER",
+  "feature_names": [
+    "GENDER",
+    "AGE",
+    "SMOKING",
+    "YELLOW_FINGERS",
+    "ANXIETY",
+    "PEER_PRESSURE",
+    "CHRONIC DISEASE",
+    "FATIGUE ",
+    "ALLERGY ",
+    "WHEEZING",
+    "ALCOHOL CONSUMING",
+    "COUGHING",
+    "SHORTNESS OF BREATH",
+    "SWALLOWING DIFFICULTY",
+    "CHEST PAIN"
+  ],
+  "feature_types": {
+    "GENDER": "int64",
+    "AGE": "int64",
+    "SMOKING": "int64",
+    "YELLOW_FINGERS": "int64",
+    "ANXIETY": "int64",
+    "PEER_PRESSURE": "int64",
+    "CHRONIC DISEASE": "int64",
+    "FATIGUE ": "int64",
+    "ALLERGY ": "int64",
+    "WHEEZING": "int64",
+    "ALCOHOL CONSUMING": "int64",
+    "COUGHING": "int64",
+    "SHORTNESS OF BREATH": "int64",
+    "SWALLOWING DIFFICULTY": "int64",
+    "CHEST PAIN": "int64"
+  },
+  "target_mapping": {
+    "YES": 1,
+    "NO": 0
+  },
+  "categorical_value_mappings": {
+    "GENDER": {
+      "M": 1,
+      "F": 0
+    },
+    "survey_questions": {
+      "NO": 0,
+      "YES": 1
+    }
+  },
+  "dataset_source": "Kaggle Survey Lung Cancer Dataset",
+  "dataset_license": "CC0: Public Domain",
+  "duplicate_policy": "Removed exact row duplicates to protect validation split integrity",
+  "selected_model": "Logistic Regression",
+  "evaluation_metrics": {
+    "accuracy": 0.8709677419354839,
+    "balanced_accuracy": 0.9259259259259259,
+    "precision": 1.0,
+    "recall": 0.8518518518518519,
+    "f1_score": 0.92,
+    "roc_auc": 0.9537037037037037,
+    "mcc": 0.6526300069150407
+  },
+  "validation_method": "5-Fold Stratified Cross-Validation",
+  "model_artifact": "best_lung_cancer_pipeline.pkl",
+  "metadata_version": "1.0.0"
+}
